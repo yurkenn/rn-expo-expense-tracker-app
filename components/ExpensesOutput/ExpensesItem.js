@@ -1,16 +1,17 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { GlobalStyles } from "../../constants/styles";
-import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
 
-const ExpenseItem = ({ id, title, date, amount }) => {
+import { GlobalStyles } from "../../constants/styles";
+import { getFormattedDate } from "../../util/date";
+
+function ExpenseItem({ id, description, amount, date }) {
   const navigation = useNavigation();
-  const expensePressHandler = () => {
-    navigation.navigate("ManageExpenses", {
+
+  function expensePressHandler() {
+    navigation.navigate("ManageExpense", {
       expenseId: id,
     });
-  };
+  }
 
   return (
     <Pressable
@@ -19,29 +20,37 @@ const ExpenseItem = ({ id, title, date, amount }) => {
     >
       <View style={styles.expenseItem}>
         <View>
-          <Text style={[styles.textBase, styles.description]}>{title}</Text>
+          <Text style={[styles.textBase, styles.description]}>
+            {description}
+          </Text>
           <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text style={styles.amount}>${amount.toFixed(2)}</Text>
+          <Text style={styles.amount}>{amount.toFixed(2)}</Text>
         </View>
       </View>
     </Pressable>
   );
-};
+}
 
 export default ExpenseItem;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.75,
+  },
   expenseItem: {
     padding: 12,
     marginVertical: 8,
     backgroundColor: GlobalStyles.colors.primary500,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     borderRadius: 6,
     elevation: 3,
+    shadowColor: GlobalStyles.colors.gray500,
+    shadowRadius: 4,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.4,
   },
   textBase: {
     color: GlobalStyles.colors.primary50,
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 4,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
@@ -63,8 +72,5 @@ const styles = StyleSheet.create({
   amount: {
     color: GlobalStyles.colors.primary500,
     fontWeight: "bold",
-  },
-  pressed: {
-    opacity: 0.75,
   },
 });
